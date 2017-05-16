@@ -17,5 +17,6 @@
 
 #include <accelerando/benchmark.hpp>
 #include <accelerando/main.hpp>
+#include <accelerando/test.hpp>
 
 #endif

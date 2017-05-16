@@ -18,6 +18,7 @@ headers = include_directories('headers')
 sources = [
     'sources/benchmark.cpp',
     'sources/main.cpp',
+    'sources/test.cpp',
 ]
 
 accel = static_library('accel', sources, include_directories : headers)
