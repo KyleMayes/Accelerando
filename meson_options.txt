@@ -1,0 +1,4 @@
+option('examples', type : 'boolean', value : false)
+
+option('disable_exceptions', type : 'boolean', value : false)
+option('disable_rtti', type : 'boolean', value : false)
