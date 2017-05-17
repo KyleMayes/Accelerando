@@ -26,7 +26,7 @@ accel = static_library('accel', sources, include_directories : headers)
 
 # Examples
 
-examples = ['example']
+examples = ['benchmarks', 'example']
 
 if get_option('examples')
     foreach example : examples
