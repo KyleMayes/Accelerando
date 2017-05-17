@@ -12,12 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef ACCEL_HPP
-#define ACCEL_HPP
-
-#include <accelerando/benchmark.hpp>
-#include <accelerando/main.hpp>
 #include <accelerando/registry.hpp>
-#include <accelerando/test.hpp>
 
-#endif
+namespace accel {
+
+Lifecycle::Lifecycle(Function set_up, Function tear_down) : set_up{set_up}, tear_down{tear_down} { }
+
+bool operator<(Lifecycle left, Lifecycle right) {
+    if (left.set_up == right.set_up) {
+        return left.tear_down < right.tear_down;
+    } else {
+        return left.set_up < right.set_up;
+    }
+}
+
+Registry& Registry::get() {
+    static Registry instance;
+    return instance;
+}
+
+const std::vector<Instance<Benchmark>>& Registry::get_benchmarks() const {
+    return benchmarks;
+}
+
+const std::vector<Instance<Test>>& Registry::get_tests() const {
+    return tests;
+}
+
+}
