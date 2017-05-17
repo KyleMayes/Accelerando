@@ -19,7 +19,6 @@
 #include <accelerando/test.hpp>
 
 #include <memory>
-#include <type_traits>
 
 namespace accel {
 

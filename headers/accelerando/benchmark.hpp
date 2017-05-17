@@ -17,6 +17,7 @@
 
 #include <chrono>
 #include <cstdint>
+#include <type_traits>
 #include <vector>
 
 namespace accel {
@@ -92,6 +93,59 @@ protected:
     /// The user-supplied benchmark function.
     virtual void execute() = 0;
 };
+
+// The implementations of `retain()` below are based on the implementations of `doNotOptimizeAway()`
+// in Facebook's `folly` library (https://github.com/facebook/folly).
+
+#ifdef _MSC_VER
+namespace detail {
+    #pragma optimize("", off)
+    inline void sink(const void*) { }
+    #pragma optimize("", on)
+}
+
+/// Prevents the optimizer from removing the computation of the supplied value.
+template <class T>
+void retain(T& value) {
+    detail::sink(&value)
+}
+
+/// Prevents the optimizer from removing the computation of the supplied value.
+template <class T>
+void retain(const T& value) {
+    detail::sink(&value);
+}
+#else
+namespace detail {
+    /// Whether values of the provided type parameter can and should be stored in a register to
+    /// force the computation of the value.
+    template <class T>
+    constexpr static auto REGISTER =
+        // The type needs to actually fit in a register.
+        sizeof(std::decay_t<T>) <= sizeof(long) &&
+        // The type needs to be trivially copyable so the compiler will be willing to store values
+        // of the type in a register.
+        std::is_trivially_copyable_v<T> &&
+        // The type shouldn't be a pointer because storing a pointer in a register won't actually
+        // force the computation of the value the pointer refers to which could be confusing.
+        !std::is_pointer_v<std::decay_t<T>>;
+}
+
+/// Prevents the optimizer from removing the computation of the supplied value.
+template <class T, std::enable_if_t<detail::REGISTER<T>, int> = 0>
+void retain(const T& value) {
+    // Force the compiler to store `value` in a register.
+    asm volatile("" :: "r"(value));
+}
+
+/// Prevents the optimizer from removing the computation of the supplied value.
+template <class T, std::enable_if_t<!detail::REGISTER<T>, int> = 0>
+void retain(const T& value) {
+    // Notify the compiler that we will read `value` from memory and potentially read and write from
+    // any other memory locations.
+    asm volatile("" :: "m"(value) : "memory");
+}
+#endif
 
 }
 
