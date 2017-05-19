@@ -205,10 +205,10 @@ private:
     class ACCEL_CLASS(NAME) : public FIXTURE { \
     protected: \
         template <TYPES> \
-        void execute_pt(__VA_ARGS__); \
+        void execute_pt(std::vector<::accel::Failure>& _Accel_failures, __VA_ARGS__); \
     }; \
     template <TYPES> \
-    void ACCEL_CLASS(NAME)::execute_pt(__VA_ARGS__)
+    void ACCEL_CLASS(NAME)::execute_pt(std::vector<::accel::Failure>& _Accel_failures, __VA_ARGS__)
 
 /// Defines a parameterized and templated test.
 #define TEST_PT(NAME, TYPES, ...) \
@@ -217,7 +217,7 @@ private:
 /// Defines and registers an instance of a parameterized and templated test.
 #define TEST_PT_INSTANCE(NAME, SUBNAME, TYPES, ...) \
     ACCEL_TEST_F(ACCEL_CLASS(NAME), NAME##_##SUBNAME) { \
-        execute_pt<TYPES>(__VA_ARGS__); \
+        execute_pt<TYPES>(_Accel_failures, __VA_ARGS__); \
     }
 
 /// Defines a parameterized test.
@@ -234,7 +234,7 @@ private:
 
 /// Defines a templated test.
 #define TEST_T_F(FIXTURE, NAME, ...) \
-    TEST_PT_F(FIXTURE, NAME, ACCEL_GROUP(__VA_ARGS__), )
+    TEST_PT_F(FIXTURE, NAME, ACCEL_GROUP(__VA_ARGS__), int)
 
 /// Defines a templated test.
 #define TEST_T(NAME, ...) \
@@ -242,7 +242,7 @@ private:
 
 /// Defines and registers an instance of a templated test.
 #define TEST_T_INSTANCE(NAME, SUBNAME, ...) \
-    TEST_PT_INSTANCE(NAME, SUBNAME, ACCEL_GROUP(__VA_ARGS__), )
+    TEST_PT_INSTANCE(NAME, SUBNAME, ACCEL_GROUP(__VA_ARGS__), 0)
 
 }
 

@@ -16,6 +16,7 @@ endif
 
 headers = include_directories('headers')
 sources = [
+    'sources/assert.cpp',
     'sources/benchmark.cpp',
     'sources/main.cpp',
     'sources/registry.cpp',

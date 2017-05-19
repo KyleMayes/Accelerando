@@ -15,6 +15,7 @@
 #ifndef ACCEL_HPP
 #define ACCEL_HPP
 
+#include <accelerando/assert.hpp>
 #include <accelerando/benchmark.hpp>
 #include <accelerando/main.hpp>
 #include <accelerando/registry.hpp>
