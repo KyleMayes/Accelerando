@@ -2,14 +2,14 @@ project('accelerando', 'cpp')
 
 # Flags
 
-add_global_arguments('-std=c++1z', '-Wall', '-Wextra', '-pedantic', language : 'cpp')
+add_project_arguments('-std=c++1z', '-Wall', '-Wextra', '-pedantic', language : 'cpp')
 
 if get_option('disable_exceptions')
-    add_global_arguments('-fno-exceptions', '-DACCEL_NO_EXCEPTIONS', language : 'cpp')
+    add_project_arguments('-fno-exceptions', '-DACCEL_NO_EXCEPTIONS', language : 'cpp')
 endif
 
 if get_option('disable_rtti')
-    add_global_arguments('-fno-rtti', '-DACCEL_NO_RTTI', language : 'cpp')
+    add_project_arguments('-fno-rtti', '-DACCEL_NO_RTTI', language : 'cpp')
 endif
 
 # Library
