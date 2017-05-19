@@ -62,9 +62,9 @@ BENCHMARK_P(Fibonacci, uint64_t nth) {
     }
 }
 
-BENCHMARK_P_INSTANCE(Fibonacci, 16, 16);
-BENCHMARK_P_INSTANCE(Fibonacci, 32, 32);
-BENCHMARK_P_INSTANCE(Fibonacci, 64, 64);
+BENCHMARK_P_INSTANCE(Fibonacci, 16, 16)
+BENCHMARK_P_INSTANCE(Fibonacci, 32, 32)
+BENCHMARK_P_INSTANCE(Fibonacci, 64, 64)
 
 //================================================
 // Templated
@@ -78,8 +78,8 @@ BENCHMARK_T(Emplace, template <class...> class C) {
     accel::retain(container);
 }
 
-BENCHMARK_T_INSTANCE(Emplace, Map, std::map);
-BENCHMARK_T_INSTANCE(Emplace, UnorderedMap, std::unordered_map);
+BENCHMARK_T_INSTANCE(Emplace, Map, std::map)
+BENCHMARK_T_INSTANCE(Emplace, UnorderedMap, std::unordered_map)
 
 //================================================
 // Paramaterized and Templated
@@ -90,13 +90,13 @@ BENCHMARK_PT(Find, ACCEL_GROUP(template <class...> class C), uint64_t nth) {
     accel::retain(std::find(CONTAINER.begin(), CONTAINER.end(), nth));
 }
 
-BENCHMARK_PT_INSTANCE(Find, List10, ACCEL_GROUP(std::list), 10);
-BENCHMARK_PT_INSTANCE(Find, List100, ACCEL_GROUP(std::list), 100);
-BENCHMARK_PT_INSTANCE(Find, List1000, ACCEL_GROUP(std::list), 1000);
+BENCHMARK_PT_INSTANCE(Find, List10, ACCEL_GROUP(std::list), 10)
+BENCHMARK_PT_INSTANCE(Find, List100, ACCEL_GROUP(std::list), 100)
+BENCHMARK_PT_INSTANCE(Find, List1000, ACCEL_GROUP(std::list), 1000)
 
-BENCHMARK_PT_INSTANCE(Find, Vector10, ACCEL_GROUP(std::vector), 10);
-BENCHMARK_PT_INSTANCE(Find, Vector100, ACCEL_GROUP(std::vector), 100);
-BENCHMARK_PT_INSTANCE(Find, Vector1000, ACCEL_GROUP(std::vector), 1000);
+BENCHMARK_PT_INSTANCE(Find, Vector10, ACCEL_GROUP(std::vector), 10)
+BENCHMARK_PT_INSTANCE(Find, Vector100, ACCEL_GROUP(std::vector), 100)
+BENCHMARK_PT_INSTANCE(Find, Vector1000, ACCEL_GROUP(std::vector), 1000)
 
 //================================================
 // Fixtures

@@ -56,9 +56,9 @@ TEST_P(Parity, uint64_t integer) {
     ASSERT_NE(integer % 2, 1);
 }
 
-TEST_P_INSTANCE(Parity, 2, 2);
-TEST_P_INSTANCE(Parity, 4, 4);
-TEST_P_INSTANCE(Parity, 8, 8);
+TEST_P_INSTANCE(Parity, 2, 2)
+TEST_P_INSTANCE(Parity, 4, 4)
+TEST_P_INSTANCE(Parity, 8, 8)
 
 //================================================
 // Templated
@@ -76,8 +76,8 @@ TEST_T(Emplace, template <class...> class C) {
     }
 }
 
-TEST_T_INSTANCE(Emplace, Map, std::map);
-TEST_T_INSTANCE(Emplace, UnorderedMap, std::unordered_map);
+TEST_T_INSTANCE(Emplace, Map, std::map)
+TEST_T_INSTANCE(Emplace, UnorderedMap, std::unordered_map)
 
 //================================================
 // Paramaterized and Templated
@@ -88,13 +88,13 @@ TEST_PT(Find, ACCEL_GROUP(template <class...> class C), uint64_t nth) {
     ASSERT_NE(std::find(CONTAINER.begin(), CONTAINER.end(), nth), CONTAINER.end());
 }
 
-TEST_PT_INSTANCE(Find, List10, ACCEL_GROUP(std::list), 10);
-TEST_PT_INSTANCE(Find, List100, ACCEL_GROUP(std::list), 100);
-TEST_PT_INSTANCE(Find, List1000, ACCEL_GROUP(std::list), 1000);
+TEST_PT_INSTANCE(Find, List10, ACCEL_GROUP(std::list), 10)
+TEST_PT_INSTANCE(Find, List100, ACCEL_GROUP(std::list), 100)
+TEST_PT_INSTANCE(Find, List1000, ACCEL_GROUP(std::list), 1000)
 
-TEST_PT_INSTANCE(Find, Vector10, ACCEL_GROUP(std::vector), 10);
-TEST_PT_INSTANCE(Find, Vector100, ACCEL_GROUP(std::vector), 100);
-TEST_PT_INSTANCE(Find, Vector1000, ACCEL_GROUP(std::vector), 1000);
+TEST_PT_INSTANCE(Find, Vector10, ACCEL_GROUP(std::vector), 10)
+TEST_PT_INSTANCE(Find, Vector100, ACCEL_GROUP(std::vector), 100)
+TEST_PT_INSTANCE(Find, Vector1000, ACCEL_GROUP(std::vector), 1000)
 
 //================================================
 // Fixtures
