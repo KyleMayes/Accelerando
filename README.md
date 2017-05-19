@@ -4,6 +4,13 @@ A C++17 testing and benchmarking library.
 
 Released under the Apache License 2.0.
 
+## Features
+
+* Powerful custom assertions
+* Parameterized benchmarks and tests
+* Templated benchmarks and tests
+* Exceptions and RTTI not required
+
 ## Example
 
 ```c++
