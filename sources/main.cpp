@@ -208,6 +208,75 @@ struct Runner<Benchmark> {
     }
 };
 
+template <>
+struct Runner<Test> {
+    uint64_t failures = 0;
+
+    Runner() = default;
+
+    void handle_start(const std::vector<const Instance<Test>*>& filtered) {
+        GREEN.print("╔════════════╗ ");
+        MAGENTA.print(std::to_string(filtered.size()) + " test(s).\n");
+        if (!filtered.empty()) {
+            std::cout << std::endl;
+        }
+    }
+
+    int handle_end() {
+        if (failures == 0) {
+            GREEN.print("\n╚════════════╝ ");
+            MAGENTA.print("All tests passed.\n");
+            return 0;
+        } else {
+            RED.print("\n╚════════════╝ ");
+            MAGENTA.print(std::to_string(failures) + " test(s) failed.\n");
+            return 1;
+        }
+    }
+
+    void handle_instance(const Instance<Test>& test, const Options&) {
+        GREEN.print("┌─RUN────────┐ ");
+        CYAN.print(test.name);
+        std::cout << std::endl;
+
+        auto report = test.instance->run();
+        for (const auto& failure : report.failures) {
+            // Print the location.
+            std::string location{failure.location.file};
+            location.push_back(':');
+            location.append(std::to_string(failure.location.line));
+            YELLOW.print(" " + location + ":\n");
+
+            // Print the assertion.
+            std::cout << "   " << failure.assertion << std::endl;
+
+            // Print the message, if any.
+            std::string padding{""};
+            if (failure.message) {
+                padding = "  ";
+                std::cout << "     " << *failure.message << std::endl;
+            }
+
+            // Print any key-value pairs.
+            if (!failure.information.empty()) {
+                std::cout << padding << "     where" << std::endl;
+                for (const auto [key, value] : failure.information) {
+                    std::cout << padding << "       " << key << " = " << value << std::endl;
+                }
+            }
+        }
+
+        if (report.failures.empty()) {
+            GREEN.print("└───────PASS─┘ ");
+        } else {
+            failures += 1;
+            RED.print("└───────FAIL─┘ ");
+        }
+        CYAN.print(test.name);
+        std::cout << std::endl;
+    }
+};
+
 template <class T>
 int run(int argc, char* argv[], const std::vector<Instance<T>>& instances) {
     // Parse the command-line arguments.
@@ -259,7 +328,7 @@ int main_benchmarks(int argc, char* argv[]) {
 }
 
 int main_tests(int argc, char* argv[]) {
-    return 0;
+    return run(argc, argv, Registry::get().get_tests());
 }
 
 }
