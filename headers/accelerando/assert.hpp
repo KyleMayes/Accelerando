@@ -18,6 +18,7 @@
 #include <accelerando/map.hpp>
 #include <accelerando/registry.hpp>
 
+#include <array>
 #include <cstring>
 #include <functional>
 #include <iomanip>

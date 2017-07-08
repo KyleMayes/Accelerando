@@ -18,6 +18,7 @@
 
 #include <iomanip>
 #include <iostream>
+#include <map>
 #include <regex>
 
 #if defined(_WIN32)
