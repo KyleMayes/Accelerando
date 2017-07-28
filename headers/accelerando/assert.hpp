@@ -315,7 +315,7 @@ namespace detail {
 /// Defines an exception assertion.
 #define ACCEL_ASSERT_THROW(RETURN, NAME, EXPRESSION, EXPECTED) \
     ACCEL_ASSERT_HELPER(RETURN, NAME "(" #EXPRESSION ")", \
-        ::accel::detail::exception, [] { EXPRESSION; }, EXPECTED)
+        ::accel::detail::exception, [&] { EXPRESSION; }, EXPECTED)
 
 /// Defines a terminating throw assertion.
 #define ASSERT_THROW(EXPRESSION) ACCEL_ASSERT_THROW(true, "ASSERT_THROW", EXPRESSION, true)
