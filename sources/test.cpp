@@ -39,7 +39,7 @@ TestReport Test::run() {
 #else
     try {
         execute(failures);
-    } catch (const std::runtime_error& e) {
+    } catch (const std::exception& e) {
         failures.emplace_back(location, "Unexpected exception.");
         failures.back().information.emplace_back("message", e.what());
     } catch (...) {
