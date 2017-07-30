@@ -148,6 +148,12 @@ struct Options {
     }
 };
 
+std::string format_file(const std::string& file) {
+    size_t start = 0;
+    for (; file.compare(start, 3, "../") == 0; start += 3) { }
+    return file.substr(start);
+}
+
 std::string format_nanoseconds(double nanoseconds, size_t length) {
     std::pair<double, const char*> display;
     if (nanoseconds < 1'000.0) {
@@ -242,27 +248,31 @@ struct Runner<Test> {
 
         auto report = test.instance->run();
         for (const auto& failure : report.failures) {
-            // Print the location.
-            std::string location{failure.location.file};
-            location.push_back(':');
-            location.append(std::to_string(failure.location.line));
-            YELLOW.print(" " + location + ":\n");
+            // Print the location stack.
+            std::string padding{" "};
+            for (auto location : failure.stack) {
+                std::string string{padding};
+                string.append(format_file(location.file));
+                string.push_back(':');
+                string.append(std::to_string(location.line));
+                YELLOW.print(string + ":\n");
+                padding.append("  ");
+            }
 
             // Print the assertion.
-            std::cout << "   " << failure.assertion << std::endl;
+            std::cout << padding << failure.assertion << std::endl;
 
             // Print the message, if any.
-            std::string padding{""};
             if (failure.message) {
-                padding = "  ";
-                std::cout << "     " << *failure.message << std::endl;
+                padding.append("  ");
+                std::cout << padding << *failure.message << std::endl;
             }
 
             // Print any key-value pairs.
             if (!failure.information.empty()) {
-                std::cout << padding << "     where" << std::endl;
+                std::cout << padding << "  where" << std::endl;
                 for (const auto [key, value] : failure.information) {
-                    std::cout << padding << "       " << key << " = " << value << std::endl;
+                    std::cout << padding << "    " << key << " = " << value << std::endl;
                 }
             }
         }

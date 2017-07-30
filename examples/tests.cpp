@@ -151,12 +151,28 @@ ASSERTION_T(is_equal_within, ACCEL_GROUP(class T), T left, T right, T delta) {
     }
 }
 
+ASSERTION_GROUP(is_really_even, uint64_t integer) {
+    EXPECT(is_even, integer);
+    EXPECT(is_even, integer);
+}
+
+ASSERTION_GROUP_T(is_really_equal_within, ACCEL_GROUP(class T), T left, T right, T delta) {
+    EXPECT(is_equal_within, left, right, delta);
+    EXPECT(is_equal_within, left, right, delta);
+}
+
 TEST(Custom) {
     EXPECT(is_even, 2);
     EXPECT(is_even, 3);
 
     EXPECT(is_equal_within, 5 + 5, 15, 5);
     EXPECT(is_equal_within, 5 + 5, 20, 5);
+
+    EXPECT_GROUP(is_really_even, 2);
+    EXPECT_GROUP(is_really_even, 3);
+
+    EXPECT_GROUP(is_really_equal_within, 5 + 5, 15, 5);
+    EXPECT_GROUP(is_really_equal_within, 5 + 5, 20, 5);
 }
 
 TEST(Boolean) {

@@ -21,8 +21,7 @@ namespace accel {
 Location::Location(const char* file, uint64_t line) : file{file}, line{line} { }
 
 Failure::Failure(Location location, std::string assertion)
-    : location{location}
-    , assertion{std::move(assertion)} { }
+    : stack{location}, assertion{std::move(assertion)} { }
 
 void Failure::add_information(std::string key, std::string value) {
     information.emplace_back(std::move(key), std::move(value));

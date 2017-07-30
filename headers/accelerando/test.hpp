@@ -37,8 +37,8 @@ struct Location {
 
 /// An assertion failure.
 struct Failure {
-    /// The location of the failed assertion.
-    Location location;
+    /// The location stack of the failed assertion.
+    std::vector<Location> stack;
     /// The failed assertion.
     std::string assertion;
     /// The message provided by the failed assertion, if any.

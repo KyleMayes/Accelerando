@@ -52,7 +52,17 @@ struct Assertion {
     FUNCTION(::accel::Assertion<ACCEL_SIZEOF(__VA_ARGS__)> assertion, __VA_ARGS__)
 
 /// Defines an assertion function.
-#define ASSERTION(FUNCTION, ...) ASSERTION_T(FUNCTION, ACCEL_GROUP(class = void), __VA_ARGS__)
+#define ASSERTION(FUNCTION, ...) \
+    ASSERTION_T(FUNCTION, ACCEL_GROUP(class = void), __VA_ARGS__)
+
+/// Defines a templated assertion group function.
+#define ASSERTION_GROUP_T(FUNCTION, TYPES, ...) \
+    template <TYPES> \
+    void FUNCTION(ACCEL_UNUSED std::vector<::accel::Failure>& _Accel_failures, __VA_ARGS__)
+
+/// Defines an assertion group function.
+#define ASSERTION_GROUP(FUNCTION, ...) \
+    ASSERTION_GROUP_T(FUNCTION, ACCEL_GROUP(class = void), __VA_ARGS__)
 
 /// Expands to a value which is returned by successful assertion functions.
 #define PASS (std::optional<::accel::Failure>{})
@@ -227,6 +237,25 @@ namespace detail {
 #define ASSERT(FUNCTION, ...) ACCEL_ASSERT(true, "ASSERT", FUNCTION, __VA_ARGS__)
 /// Defines a non-terminating custom assertion.
 #define EXPECT(FUNCTION, ...) ACCEL_ASSERT(false, "EXPECT", FUNCTION, __VA_ARGS__)
+
+/// Defines a custom group assertion.
+#define ACCEL_ASSERT_GROUP(RETURN, FUNCTION, ...) { \
+    std::vector<::accel::Failure> failures; \
+    FUNCTION(failures, __VA_ARGS__); \
+    auto failed = !failures.empty(); \
+    for (auto failure : failures) { \
+        failure.stack.insert(failure.stack.begin(), ::accel::Location{__FILE__, __LINE__}); \
+        _Accel_failures.push_back(std::move(failure)); \
+    } \
+    if (failed && RETURN) { \
+        return; \
+    } \
+}
+
+/// Defines a terminating custom group assertion.
+#define ASSERT_GROUP(FUNCTION, ...) ACCEL_ASSERT_GROUP(true, FUNCTION, __VA_ARGS__)
+/// Defines a non-terminating custom group assertion.
+#define EXPECT_GROUP(FUNCTION, ...) ACCEL_ASSERT_GROUP(false, FUNCTION, __VA_ARGS__)
 
 //================================================
 // Boolean
